@@ -55,7 +55,6 @@ curl -X POST "https://your-app-name.onrender.com/auth/register" \
 #### Login:
 ```bash
 curl -X POST "https://your-app-name.onrender.com/auth/login" \
-  -H "Content-Type: application/x-www-form-urlencoded" \
   -d "username=testuser&password=password123"
 ```
 

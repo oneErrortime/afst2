@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends, HTTPException, status, Request
+from fastapi import FastAPI, Depends, HTTPException, status, Request, Security
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from typing import Optional
@@ -56,6 +56,10 @@ def register(user: UserCreate, db: Session = Depends(get_db)):
     return db_user
 
 from fastapi import Form
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+
+# Security scheme for JWT
+security = HTTPBearer()
 
 @app.post("/auth/login")
 def login(username: str = Form(...), password: str = Form(...), db: Session = Depends(get_db)):
@@ -74,12 +78,8 @@ def login(username: str = Form(...), password: str = Form(...), db: Session = De
     return {"access_token": access_token, "token_type": "bearer"}
 
 @app.get("/auth/me", response_model=User)
-def get_current_user(token: str = None, db: Session = Depends(get_db)):
-    if token is None:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Authorization token required"
-        )
+def get_current_user(credentials: HTTPAuthorizationCredentials = Security(security), db: Session = Depends(get_db)):
+    token = credentials.credentials
     
     username = verify_token(token)
     if username is None:
