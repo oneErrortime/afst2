@@ -4,7 +4,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from app.main import app
 from app.database import get_db, Base
-from app.models import Book
+from app import models  # Import models to register them with Base
 
 # Create test database
 SQLALCHEMY_DATABASE_URL = "sqlite:///./test.db"
