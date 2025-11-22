@@ -133,7 +133,18 @@ The application includes a web-based dashboard for easier interaction with the A
 
 A frontend-only version of the dashboard is available for deployment on GitHub Pages. This static version can connect to any backend API instance and provides the same functionality without requiring server-side deployment.
 
-To deploy to GitHub Pages:
+### Deployment to GitHub Pages
+
+There are two ways to deploy the frontend to GitHub Pages:
+
+**Method 1: Using GitHub Actions (Recommended)**
+1. The repository already includes a GitHub Actions workflow in `.github/workflows/deploy.yml`
+2. Push your code to the main branch
+3. Go to repository Settings -> Pages
+4. Select source as "Deploy from a branch" and choose `gh-pages` branch
+5. The site will be available at `https://<username>.github.io/<repository-name>`
+
+**Method 2: Manual Deployment**
 1. Push the code in the `/docs` directory to your GitHub repository
 2. Go to repository Settings -> Pages
 3. Select source as your main branch with `/docs` folder
@@ -145,6 +156,16 @@ The GitHub Pages version includes:
 - Dashboard statistics
 - API URL configuration
 - Full library management functionality
+
+### Local Testing
+
+To test the GitHub Pages version locally, use the provided script:
+
+```bash
+python local_test_server.py
+```
+
+This will start a local server at http://localhost:8000 to serve the frontend files from the `/docs` directory.
 
 ## Additional Feature Proposal
 
