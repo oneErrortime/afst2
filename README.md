@@ -125,6 +125,10 @@ Protected endpoints include all book and reader management operations, as well a
 
 After starting the application, you'll need to register the first librarian user through the `/auth/register` endpoint. Once registered, you can log in via `/auth/login` to obtain a JWT token for accessing protected endpoints.
 
+### Web Dashboard
+
+The application includes a web-based dashboard for easier interaction with the API. After starting the application, navigate to `http://localhost:8000/dashboard` to access the user-friendly interface for managing books, readers, and borrowing operations.
+
 ## Additional Feature Proposal
 
 An additional feature that could be implemented is **overdue book notifications**. This would involve:
