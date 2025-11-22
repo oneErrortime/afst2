@@ -2,6 +2,14 @@
 
 A comprehensive library management system built with FastAPI that provides RESTful API endpoints for managing books, readers, and book borrowing processes. The system implements JWT-based authentication for librarians and includes comprehensive business logic for library operations.
 
+
+ДВА ОСНОВНЫХ ИНСТАНСА:
+https://ooouwuooo.github.io/afst/  - это фронтенд, тут ты можешь протестировать функционал проекта. 
+https://afst.onrender.com/  - это временный бэкенд, тут ты можешь самостоятельно сгенерировать и задеплоить проект. Поддомен выбирай какой захочешь, не обязателньо afst. 
+
+**Регистрируешься в render.com или используешь мой временный бэкенд, далее вводишь его во фронтенд-панели и тестируешь функциональность софта**
+
+
 ## Features
 
 - JWT-based authentication for librarians
