@@ -129,6 +129,23 @@ After starting the application, you'll need to register the first librarian user
 
 The application includes a web-based dashboard for easier interaction with the API. After starting the application, navigate to `http://localhost:8000/dashboard` to access the user-friendly interface for managing books, readers, and borrowing operations.
 
+## GitHub Pages Demo
+
+A frontend-only version of the dashboard is available for deployment on GitHub Pages. This static version can connect to any backend API instance and provides the same functionality without requiring server-side deployment.
+
+To deploy to GitHub Pages:
+1. Push the code in the `/docs` directory to your GitHub repository
+2. Go to repository Settings -> Pages
+3. Select source as your main branch with `/docs` folder
+4. The site will be available at `https://<username>.github.io/<repository-name>`
+
+The GitHub Pages version includes:
+- Responsive design with Bootstrap 5
+- Modern UI with Font Awesome icons
+- Dashboard statistics
+- API URL configuration
+- Full library management functionality
+
 ## Additional Feature Proposal
 
 An additional feature that could be implemented is **overdue book notifications**. This would involve:

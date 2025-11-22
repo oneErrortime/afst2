@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Management System - GitHub Pages Demo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --success-color: #4cc9f0;
+            --danger-color: #f72585;
+            --warning-color: #f8961e;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+            min-height: 100vh;
+            padding-bottom: 50px;
+        }
+        
+        .section {
+            margin-bottom: 30px;
+            padding: 25px;
+            border-radius: 12px;
+            background-color: white;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+        }
+        
+        .section h3 {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .section h4 {
+            color: var(--secondary-color);
+        }
+        
+        .token-display {
+            background: linear-gradient(45deg, #4361ee, #3a0ca3);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            word-break: break-all;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+        
+        .card {
+            border-radius: 10px;
+            overflow: hidden;
+            border: none;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .btn-success {
+            background-color: #2ecc71;
+            border-color: #2ecc71;
+        }
+        
+        .btn-warning {
+            background-color: var(--warning-color);
+            border-color: var(--warning-color);
+        }
+        
+        .btn-danger {
+            background-color: var(--danger-color);
+            border-color: var(--danger-color);
+        }
+        
+        .table th {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .navbar {
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            margin-bottom: 30px;
+            border-radius: 0 0 20px 20px;
+            padding: 15px 0;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+        }
+        
+        .nav-link {
+            color: rgba(255, 255, 255, 0.85) !important;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-link:hover {
+            color: white !important;
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+        
+        .dashboard-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin: 10px 0;
+        }
+        
+        .stat-label {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+        
+        .api-config {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .api-config h5 {
+            margin-bottom: 15px;
+            color: var(--secondary-color);
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="#">
+                <i class="fas fa-book-reader me-2"></i>Library Management System
+            </a>
+            <div class="navbar-nav ms-auto">
+                <span class="navbar-text me-3" id="statusText">Not logged in</span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="text-center mb-5">
+            <h1 class="display-4 fw-bold text-primary">Library Management System</h1>
+            <p class="lead">A complete library management solution with user authentication, book management, and borrowing system</p>
+        </div>
+
+        <div class="dashboard-stats">
+            <div class="stat-card">
+                <i class="fas fa-book feature-icon"></i>
+                <div class="stat-value" id="booksCount">0</div>
+                <div class="stat-label">Total Books</div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-user feature-icon"></i>
+                <div class="stat-value" id="readersCount">0</div>
+                <div class="stat-label">Total Readers</div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-exchange-alt feature-icon"></i>
+                <div class="stat-value" id="borrowedCount">0</div>
+                <div class="stat-label">Borrowed Books</div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-check-circle feature-icon"></i>
+                <div class="stat-value" id="availableCount">0</div>
+                <div class="stat-label">Available Books</div>
+            </div>
+        </div>
+
+        <div class="api-config">
+            <h5><i class="fas fa-cog me-2"></i>API Configuration</h5>
+            <div class="row">
+                <div class="col-md-8">
+                    <label for="apiUrlInput" class="form-label">Backend API URL</label>
+                    <input type="url" class="form-control" id="apiUrlInput" placeholder="Enter your backend API URL">
+                </div>
+                <div class="col-md-4 d-flex align-items-end">
+                    <button class="btn btn-primary w-100" id="saveApiUrlBtn">Save URL</button>
+                </div>
+            </div>
+            <div class="mt-2">
+                <small class="text-muted">Current API URL: <span id="currentApiUrl">Not set</span></small>
+            </div>
+        </div>
+
+        <!-- Authentication Section -->
+        <div class="section">
+            <h3><i class="fas fa-user-lock me-2"></i>Authentication</h3>
+            <div class="row">
+                <div class="col-md-6">
+                    <h4><i class="fas fa-user-plus me-2"></i>Register</h4>
+                    <form id="registerForm">
+                        <div class="mb-3">
+                            <label for="regEmail" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="regEmail" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="regPassword" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="regPassword" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Register</button>
+                    </form>
+                </div>
+                <div class="col-md-6">
+                    <h4><i class="fas fa-sign-in-alt me-2"></i>Login</h4>
+                    <form id="loginForm">
+                        <div class="mb-3">
+                            <label for="loginEmail" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="loginEmail" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="loginPassword" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="loginPassword" required>
+                        </div>
+                        <button type="submit" class="btn btn-success w-100">Login</button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="token-display hidden" id="tokenDisplay">
+                <div>
+                    <strong><i class="fas fa-key me-2"></i>Current Token:</strong> 
+                    <span id="tokenValue"></span>
+                </div>
+                <button class="btn btn-danger" id="logoutBtn">Logout</button>
+            </div>
+        </div>
+
+        <!-- Books Section -->
+        <div class="section hidden" id="booksSection">
+            <h3><i class="fas fa-book-open me-2"></i>Books Management</h3>
+            <div class="row">
+                <div class="col-md-6">
+                    <h4><i class="fas fa-plus-circle me-2"></i>Add New Book</h4>
+                    <form id="addBookForm">
+                        <div class="mb-3">
+                            <label for="bookTitle" class="form-label">Title</label>
+                            <input type="text" class="form-control" id="bookTitle" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="bookAuthor" class="form-label">Author</label>
+                            <input type="text" class="form-control" id="bookAuthor" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="bookYear" class="form-label">Year</label>
+                            <input type="number" class="form-control" id="bookYear">
+                        </div>
+                        <div class="mb-3">
+                            <label for="bookIsbn" class="form-label">ISBN</label>
+                            <input type="text" class="form-control" id="bookIsbn">
+                        </div>
+                        <div class="mb-3">
+                            <label for="bookCopies" class="form-label">Copies</label>
+                            <input type="number" class="form-control" id="bookCopies" value="1" min="0">
+                        </div>
+                        <div class="mb-3">
+                            <label for="bookDescription" class="form-label">Description</label>
+                            <textarea class="form-control" id="bookDescription"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Add Book</button>
+                    </form>
+                </div>
+                <div class="col-md-6">
+                    <h4><i class="fas fa-list me-2"></i>Books List</h4>
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" id="searchBooks" placeholder="Search books...">
+                        <button class="btn btn-outline-primary" type="button" id="searchBooksBtn">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                    <div id="booksList"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Readers Section -->
+        <div class="section hidden" id="readersSection">
+            <h3><i class="fas fa-users me-2"></i>Readers Management</h3>
+            <div class="row">
+                <div class="col-md-6">
+                    <h4><i class="fas fa-user-plus me-2"></i>Add New Reader</h4>
+                    <form id="addReaderForm">
+                        <div class="mb-3">
+                            <label for="readerName" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="readerName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="readerEmail" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="readerEmail" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Add Reader</button>
+                    </form>
+                </div>
+                <div class="col-md-6">
+                    <h4><i class="fas fa-list me-2"></i>Readers List</h4>
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" id="searchReaders" placeholder="Search readers...">
+                        <button class="btn btn-outline-primary" type="button" id="searchReadersBtn">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                    <div id="readersList"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Borrow/Return Section -->
+        <div class="section hidden" id="borrowSection">
+            <h3><i class="fas fa-exchange-alt me-2"></i>Borrow & Return Books</h3>
+            <div class="row">
+                <div class="col-md-6">
+                    <h4><i class="fas fa-hand-holding me-2"></i>Borrow a Book</h4>
+                    <form id="borrowBookForm">
+                        <div class="mb-3">
+                            <label for="borrowBookId" class="form-label">Book ID</label>
+                            <input type="number" class="form-control" id="borrowBookId" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="borrowReaderId" class="form-label">Reader ID</label>
+                            <input type="number" class="form-control" id="borrowReaderId" required>
+                        </div>
+                        <button type="submit" class="btn btn-success w-100">Borrow Book</button>
+                    </form>
+                    
+                    <h4 class="mt-4"><i class="fas fa-undo me-2"></i>Return a Book</h4>
+                    <form id="returnBookForm">
+                        <div class="mb-3">
+                            <label for="returnBookId" class="form-label">Book ID</label>
+                            <input type="number" class="form-control" id="returnBookId" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="returnReaderId" class="form-label">Reader ID</label>
+                            <input type="number" class="form-control" id="returnReaderId" required>
+                        </div>
+                        <button type="submit" class="btn btn-warning w-100">Return Book</button>
+                    </form>
+                </div>
+                <div class="col-md-6">
+                    <h4><i class="fas fa-book-reader me-2"></i>Currently Borrowed Books</h4>
+                    <div class="input-group mb-3">
+                        <input type="number" class="form-control" id="borrowedReaderId" placeholder="Enter Reader ID">
+                        <button class="btn btn-outline-primary" type="button" id="getBorrowedBtn">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                    <div id="borrowedBooksList"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>Library Management System - GitHub Pages Demo</p>
+            <p>Connect to your backend API to experience full functionality</p>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Configuration
+        let API_BASE_URL = localStorage.getItem('apiUrl') || '';
+        const API_BASE_URL_DEFAULT = 'http://localhost:8000'; // Default for local development
+        
+        // DOM Elements
+        const tokenDisplay = document.getElementById('tokenDisplay');
+        const tokenValue = document.getElementById('tokenValue');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const statusText = document.getElementById('statusText');
+        
+        const booksSection = document.getElementById('booksSection');
+        const readersSection = document.getElementById('readersSection');
+        const borrowSection = document.getElementById('borrowSection');
+        
+        const booksCount = document.getElementById('booksCount');
+        const readersCount = document.getElementById('readersCount');
+        const borrowedCount = document.getElementById('borrowedCount');
+        const availableCount = document.getElementById('availableCount');
+        
+        const apiUrlInput = document.getElementById('apiUrlInput');
+        const saveApiUrlBtn = document.getElementById('saveApiUrlBtn');
+        const currentApiUrl = document.getElementById('currentApiUrl');
+        
+        // Auth forms
+        const registerForm = document.getElementById('registerForm');
+        const loginForm = document.getElementById('loginForm');
+        
+        // Books forms
+        const addBookForm = document.getElementById('addBookForm');
+        const searchBooksBtn = document.getElementById('searchBooksBtn');
+        const searchBooks = document.getElementById('searchBooks');
+        
+        // Readers forms
+        const addReaderForm = document.getElementById('addReaderForm');
+        const searchReadersBtn = document.getElementById('searchReadersBtn');
+        const searchReaders = document.getElementById('searchReaders');
+        
+        // Borrow/return forms
+        const borrowBookForm = document.getElementById('borrowBookForm');
+        const returnBookForm = document.getElementById('returnBookForm');
+        const getBorrowedBtn = document.getElementById('getBorrowedBtn');
+        const borrowedReaderId = document.getElementById('borrowedReaderId');
+        
+        // Get token from localStorage
+        let authToken = localStorage.getItem('authToken');
+        
+        // Set up API URL input
+        apiUrlInput.value = API_BASE_URL || API_BASE_URL_DEFAULT;
+        currentApiUrl.textContent = API_BASE_URL || 'Not set';
+        
+        // Update UI based on authentication state
+        function updateAuthUI() {
+            if (authToken) {
+                tokenDisplay.classList.remove('hidden');
+                tokenValue.textContent = authToken.substring(0, 20) + '...';
+                booksSection.classList.remove('hidden');
+                readersSection.classList.remove('hidden');
+                borrowSection.classList.remove('hidden');
+                statusText.textContent = 'Logged in';
+                statusText.className = 'navbar-text me-3 text-success';
+                
+                // Load stats
+                loadStats();
+            } else {
+                tokenDisplay.classList.add('hidden');
+                booksSection.classList.add('hidden');
+                readersSection.classList.add('hidden');
+                borrowSection.classList.add('hidden');
+                statusText.textContent = 'Not logged in';
+                statusText.className = 'navbar-text me-3 text-warning';
+            }
+        }
+        
+        // Load dashboard stats
+        async function loadStats() {
+            try {
+                const books = await apiRequest('/books/');
+                const readers = await apiRequest('/readers/');
+                const borrowed = await apiRequest('/borrows/borrowed');
+                
+                booksCount.textContent = books ? books.length : 0;
+                
+                // Calculate available books (total copies - borrowed books)
+                let totalCopies = 0;
+                books.forEach(book => totalCopies += book.copies);
+                
+                const borrowedBooksCount = borrowed ? borrowed.length : 0;
+                availableCount.textContent = totalCopies - borrowedBooksCount;
+                
+                readersCount.textContent = readers ? readers.length : 0;
+                borrowedCount.textContent = borrowedBooksCount;
+            } catch (error) {
+                console.error('Failed to load stats:', error);
+                // Set default values if API calls fail
+                booksCount.textContent = '0';
+                readersCount.textContent = '0';
+                borrowedCount.textContent = '0';
+                availableCount.textContent = '0';
+            }
+        }
+        
+        // API request helper
+        async function apiRequest(endpoint, method = 'GET', body = null) {
+            if (!API_BASE_URL) {
+                alert('Please configure the API URL first');
+                return null;
+            }
+            
+            const config = {
+                method,
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            };
+            
+            if (authToken) {
+                config.headers['Authorization'] = `Bearer ${authToken}`;
+            }
+            
+            if (body) {
+                config.body = JSON.stringify(body);
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}${endpoint}`, config);
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(data.detail || 'Request failed');
+                }
+                
+                return data;
+            } catch (error) {
+                console.error('API request error:', error);
+                alert(`Error: ${error.message}`);
+                throw error;
+            }
+        }
+        
+        // Save API URL
+        saveApiUrlBtn.addEventListener('click', () => {
+            const newUrl = apiUrlInput.value.trim();
+            if (newUrl) {
+                API_BASE_URL = newUrl;
+                localStorage.setItem('apiUrl', API_BASE_URL);
+                currentApiUrl.textContent = API_BASE_URL;
+                alert('API URL saved successfully!');
+            } else {
+                alert('Please enter a valid URL');
+            }
+        });
+        
+        // Authentication
+        registerForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('regEmail').value;
+            const password = document.getElementById('regPassword').value;
+            
+            if (!API_BASE_URL) {
+                alert('Please configure the API URL first');
+                return;
+            }
+            
+            try {
+                const response = await apiRequest('/auth/register', 'POST', { email, password });
+                alert('Registration successful! You can now login.');
+                registerForm.reset();
+            } catch (error) {
+                console.error('Registration failed:', error);
+            }
+        });
+        
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            if (!API_BASE_URL) {
+                alert('Please configure the API URL first');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    authToken = data.access_token;
+                    localStorage.setItem('authToken', authToken);
+                    updateAuthUI();
+                    alert('Login successful!');
+                    loginForm.reset();
+                } else {
+                    alert(`Login failed: ${data.detail || 'Invalid credentials'}`);
+                }
+            } catch (error) {
+                alert(`Login error: ${error.message}`);
+            }
+        });
+        
+        logoutBtn.addEventListener('click', () => {
+            authToken = null;
+            localStorage.removeItem('authToken');
+            updateAuthUI();
+            alert('Logged out successfully!');
+        });
+        
+        // Books management
+        addBookForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const bookData = {
+                title: document.getElementById('bookTitle').value,
+                author: document.getElementById('bookAuthor').value,
+                year: document.getElementById('bookYear').value || null,
+                isbn: document.getElementById('bookIsbn').value || null,
+                copies: parseInt(document.getElementById('bookCopies').value) || 1,
+                description: document.getElementById('bookDescription').value || null
+            };
+            
+            try {
+                const response = await apiRequest('/books/', 'POST', bookData);
+                alert('Book added successfully!');
+                addBookForm.reset();
+                loadBooks();
+                loadStats(); // Update stats after adding a book
+            } catch (error) {
+                console.error('Failed to add book:', error);
+            }
+        });
+        
+        async function loadBooks() {
+            try {
+                const books = await apiRequest('/books/');
+                const booksList = document.getElementById('booksList');
+                booksList.innerHTML = '';
+                
+                if (!books || books.length === 0) {
+                    booksList.innerHTML = '<p class="text-muted">No books found.</p>';
+                    return;
+                }
+                
+                const table = document.createElement('table');
+                table.className = 'table table-striped table-hover';
+                table.innerHTML = `
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Title</th>
+                            <th>Author</th>
+                            <th>Year</th>
+                            <th>ISBN</th>
+                            <th>Copies</th>
+                            <th>Available</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${books.map(book => `
+                            <tr>
+                                <td>${book.id}</td>
+                                <td>${book.title}</td>
+                                <td>${book.author}</td>
+                                <td>${book.year || '-'}</td>
+                                <td>${book.isbn || '-'}</td>
+                                <td>${book.copies}</td>
+                                <td>${book.available_copies || book.copies}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                `;
+                
+                booksList.appendChild(table);
+            } catch (error) {
+                console.error('Failed to load books:', error);
+            }
+        }
+        
+        searchBooksBtn.addEventListener('click', loadBooks);
+        
+        // Readers management
+        addReaderForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const readerData = {
+                name: document.getElementById('readerName').value,
+                email: document.getElementById('readerEmail').value
+            };
+            
+            try {
+                const response = await apiRequest('/readers/', 'POST', readerData);
+                alert('Reader added successfully!');
+                addReaderForm.reset();
+                loadReaders();
+                loadStats(); // Update stats after adding a reader
+            } catch (error) {
+                console.error('Failed to add reader:', error);
+            }
+        });
+        
+        async function loadReaders() {
+            try {
+                const readers = await apiRequest('/readers/');
+                const readersList = document.getElementById('readersList');
+                readersList.innerHTML = '';
+                
+                if (!readers || readers.length === 0) {
+                    readersList.innerHTML = '<p class="text-muted">No readers found.</p>';
+                    return;
+                }
+                
+                const table = document.createElement('table');
+                table.className = 'table table-striped table-hover';
+                table.innerHTML = `
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${readers.map(reader => `
+                            <tr>
+                                <td>${reader.id}</td>
+                                <td>${reader.name}</td>
+                                <td>${reader.email}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                `;
+                
+                readersList.appendChild(table);
+            } catch (error) {
+                console.error('Failed to load readers:', error);
+            }
+        }
+        
+        searchReadersBtn.addEventListener('click', loadReaders);
+        
+        // Borrow/Return
+        borrowBookForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const borrowData = {
+                book_id: parseInt(document.getElementById('borrowBookId').value),
+                reader_id: parseInt(document.getElementById('borrowReaderId').value)
+            };
+            
+            try {
+                const response = await apiRequest('/borrows/borrow', 'POST', borrowData);
+                alert('Book borrowed successfully!');
+                borrowBookForm.reset();
+                if (borrowedReaderId.value) {
+                    loadBorrowedBooks(borrowedReaderId.value);
+                }
+                loadStats(); // Update stats after borrowing
+            } catch (error) {
+                console.error('Failed to borrow book:', error);
+            }
+        });
+        
+        returnBookForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const returnData = {
+                book_id: parseInt(document.getElementById('returnBookId').value),
+                reader_id: parseInt(document.getElementById('returnReaderId').value)
+            };
+            
+            try {
+                const response = await apiRequest('/borrows/return', 'POST', returnData);
+                alert('Book returned successfully!');
+                returnBookForm.reset();
+                if (borrowedReaderId.value) {
+                    loadBorrowedBooks(borrowedReaderId.value);
+                }
+                loadStats(); // Update stats after returning
+            } catch (error) {
+                console.error('Failed to return book:', error);
+            }
+        });
+        
+        async function loadBorrowedBooks(readerId) {
+            try {
+                const borrowedBooks = await apiRequest(`/borrows/reader/${readerId}/borrowed`);
+                const borrowedBooksList = document.getElementById('borrowedBooksList');
+                borrowedBooksList.innerHTML = '';
+                
+                if (!borrowedBooks || borrowedBooks.length === 0) {
+                    borrowedBooksList.innerHTML = '<p class="text-muted">No borrowed books found for this reader.</p>';
+                    return;
+                }
+                
+                const table = document.createElement('table');
+                table.className = 'table table-striped table-hover';
+                table.innerHTML = `
+                    <thead>
+                        <tr>
+                            <th>Borrow ID</th>
+                            <th>Book Title</th>
+                            <th>Author</th>
+                            <th>Borrow Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${borrowedBooks.map(borrow => `
+                            <tr>
+                                <td>${borrow.id}</td>
+                                <td>${borrow.book.title}</td>
+                                <td>${borrow.book.author}</td>
+                                <td>${new Date(borrow.borrow_date).toLocaleString()}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                `;
+                
+                borrowedBooksList.appendChild(table);
+            } catch (error) {
+                console.error('Failed to load borrowed books:', error);
+            }
+        }
+        
+        getBorrowedBtn.addEventListener('click', () => {
+            if (borrowedReaderId.value) {
+                loadBorrowedBooks(borrowedReaderId.value);
+            } else {
+                alert('Please enter a Reader ID');
+            }
+        });
+        
+        // Initialize the page
+        updateAuthUI();
+        if (authToken) {
+            loadStats();
+            loadBooks();
+            loadReaders();
+        }
+    </script>
+</body>
+</html>
