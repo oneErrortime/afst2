@@ -1,34 +1,419 @@
 ```
-# Database files
-*.db
-*.sqlite
-*.sqlite3
+# Dependencies
+node_modules/
 
-# Test files
-.test_*
-test_*.py
-tests/__pycache__/
-tests/.pytest_cache/
-
-# Python
-__pycache__/
-*.py[cod]
-*$py.class
-*.so
-.Python
-build/
-develop-eggs/
+# Build artifacts
 dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
+build/
+*.js
+*.css
+
+# Environment
+.env
+.env.local
+.env.*
+
+# Logs
+*.log
+
+# Editor
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Package lock
+package-lock.json
+yarn.lock
+
+# Vite
+.vite/
+
+# React
+*.jsx
+*.tsx
+*.ts
+*.css
+*.scss
+*.sass
+
+# General temp files
+*.tmp
+*.swp
+*.swo
+
+# Coverage
+coverage/
+htmlcov/
+*.coverage
+
+# Python (if any)
+__pycache__/
+*.pyc
+*.pyo
+.Python
+*.so
 *.egg-info/
-.installed.cfg
-*.egg
+.eggs/
+.pytest_cache/
+.mypy_cache/
+.tox/
+.coverage
+
+# System files
+*.DS_Store
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Icon?
+apidoc/
+doc/
+docs/
+
+# Compressed files
+*.zip
+*.tar
+*.gz
+*.bz2
+*.xz
+*.7z
+*.rar
+*.zst
+*.lz4
+*.lzh
+*.cab
+*.arj
+*.rpm
+*.deb
+*.Z
+*.lz
+*.lzo
+*.tar.gz
+*.tar.bz2
+*.tar.xz
+*.tar.zst
+
+# Browsers
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Unit tests
+test/
+tests/
+spec/
+specs/
+
+# CI/CD
+.github/
+.gitlab/
+
+# IDE
+.vs/
+*.swp
+*.swo
+
+# Temp
+tmp/
+temp/
+
+# Cache
+.cache/
+.caches/
+
+# Backup
+*~
+*.bak
+*.backup
+
+# Vim
+*.un~
+Session.vim
+
+# Emacs
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+auto-save-list
+tramp
+.\#*
+
+# Sublime Text
+*.tmlanguage.cache
+*.tmPreferences.cache
+*.stTheme.cache
+
+# Atom
+.atom/
+
+# NetBeans
+nbproject/
+
+# Code::Blocks
+*.depend
+*.layout
+*.cbp
+
+# Qt
+*.pro.user
+*.pro.user.*
+*.qbs.user
+*.qbs.user.*
+*.moc
+*.moc.cpp
+*.qm
+
+# Visual Studio
+*.VC.db
+*.VC.VC.opendb
+*.user
+*.userosscache
+*.sln.docstates
+*.userprefs
+ipch/
+obj/
+*.VC.VC.opendb
+*.VC.db
+
+# Visual Studio Code
+.vscode/tasks.json
+.vscode/launch.json
+.vscode/settings.json
+
+# JetBrains
+*.iml
+*.ipr
+*.iws
+*.idea/
+
+# Eclipse
+.metadata
+bin/
+tmp/
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.settings/
+.loadpath
+.recommenders
+
+# IntelliJ
+out/
+
+# NetBeans
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+# BlueJ
+*.ctxt
+
+# CodeLite
+*.project
+*.workspace
+.codelite/
+session/
+Debug/
+Release/
+wxsmith/
+
+# Dev-C++
+*.dev
+
+# Visual Studio Mobile
+*.vap
+
+# Subversion
+.svn/
+
+# CVS
+ CVS/
+.cvspass
+
+# Arch
+{arch}/
+
+# Bazaar
+.bzr/
+
+# darcs
+_darcs/
+
+# fossil
+.fslckout
+.fossil-settings/
+
+# Other
+*.swp
+*~
+.DS_Store
+ehthumbs.db
+Icon?
+Thumbs.db
+.directory
+*.nib
+*~
+.DS_Store
+ehthumbs.db
+Icon?
+Thumbs.db
+.directory
+*.nib
+*~
+.DS_Store
+ehthumbs.db
+Icon?
+Thumbs.db
+.directory
+*.nib
+*~
+.DS_Store
+ehthumbs.db
+Icon?
+Thumbs.db
+.directory
+*.nib
+*~
+.DS_Store
+ehthumbs.db
+Icon?
+Thumbs.db
+.directory
+*.nib
+*~
+.DS_Store
+ehthumbs.db
+Icon?
+Thumbs.db
+.directory
+*.nib
+*~
+.DS_Store
+ehthumbs.db
+Icon?
+Thumbs.db
+.directory
+*.nib
+*~
+.DS_Store
+ehthumbs.db
+Icon?
+Thumbs.db
+.directory
+*.nib
+*~
+.DS_Store
+ehthumbs.db
+Icon?
+Thumbs.db
+.directory
+*.nib
+*~
+.DS_Store
+ehthumbs.db
+Icon?
+Thumbs.db
+.directory
+*.nib
+*~
+.DS_Store
+ehthumbs.db
+Icon?
+Thumbs.db
+.directory
+*.nib
+*~
+.DS_Store
+ehthumbs.db
+Icon?
+Thumbs.db
+.directory
+*.nib
+*~
+.DS_Store
+ehthumbs.db
+Icon?
+Thumbs.db
+.directory
+*.nib
+*~
+.DS_Store
+ehthumbs.db
+Icon?
+Thumbs.db
+.directory
+*.nib
+*~
+.DS_Store
+ehthumbs.db
+Icon?
+Thumbs.db
+.directory
+*.nib
+*~
+.DS_Store
+ehthumbs.db
+Icon?
+Thumbs.db
+.directory
+*.nib
+*~
+.DS_Store
+ehthumbs.db
+Icon?
+Thumbs.db
+.directory
+*.nib
+*~
+.DS_Store
+ehthumbs.db
+Icon?
+Thumbs.db
+.directory
+*.nib
+*~
+.DS_Store
+ehthumbs.db
+Icon?
+Thumbs.db
+.directory
+*.nib
+*~
+.DS_Store
+ehthumbs.db
+Icon?
+Thumbs.db
+.directory
+*.nib
+*~
+.DS_Store
+ehthumbs.db
+Icon?
+Thumbs.db
+.directory
+*.nib
+*~
+.DS_Store
+ehthumbs.db
+Icon?
+Thumbs.db
+.directory
+*.nib
+*~
+.DS_Store
+ehthumbs.db
+Icon?
+Thumbs.db
+.directory
+*.nib
+*~
+.DS_Store......
 ```
