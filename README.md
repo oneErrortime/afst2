@@ -177,3 +177,24 @@ pytest tests/
 ```
 
 The tests include validation of business logic, authentication, and API endpoints.
+
+## Deployment to Render.com
+
+This application can be easily deployed to Render.com. Follow these steps:
+
+1. Make sure your code is pushed to a Git repository (GitHub, GitLab, or Bitbucket)
+2. Go to https://dashboard.render.com/ and create a new Web Service
+3. Connect your Git repository
+4. Use the provided `Dockerfile` and `.render.yaml` configuration files
+5. Set the required environment variables:
+   - `DATABASE_URL`: Your PostgreSQL database connection string
+   - `SECRET_KEY`: A strong, random secret key for JWT tokens
+   - `ALGORITHM`: (optional) Defaults to HS256
+   - `ACCESS_TOKEN_EXPIRE_MINUTES`: (optional) Defaults to 30
+
+For detailed instructions, see the `DEPLOYMENT_RENDER.md` file in the repository.
+
+**Note**: For production use, make sure to:
+- Use a PostgreSQL database instead of SQLite
+- Set a strong, unique `SECRET_KEY`
+- Configure proper SSL certificates if using custom domains
