@@ -1,10 +1,20 @@
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse
+from fastapi.middleware.cors import CORSMiddleware
 import os
 from .api import auth, books, readers, borrows
 
 app = FastAPI(title="Library Management API", version="1.0.0")
+
+# Add CORS middleware to handle frontend requests
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allow all origins during development
+    allow_credentials=True,
+    allow_methods=["*"],  # Allow all methods
+    allow_headers=["*"],  # Allow all headers
+)
 
 # Include API routers
 app.include_router(auth.router, prefix="/auth", tags=["authentication"])
