@@ -250,6 +250,16 @@ class ApiClient {
                 }
             } else if (typeof data === 'string') {
                 errorMessage = data;
+            } else {
+                // Если data не является объектом или строкой, пробуем получить текст ошибки
+                try {
+                    // Пытаемся получить текст из response, если JSON не удалось распарсить
+                    if (response.statusText) {
+                        errorMessage = response.statusText;
+                    }
+                } catch (e) {
+                    errorMessage = 'Login failed with unknown error';
+                }
             }
             
             throw new ApiError(
