@@ -203,22 +203,35 @@
             display: flex;
             gap: 8px;
             margin-bottom: 20px;
+            border-bottom: 2px solid #e2e8f0;
         }
 
         .tab {
             padding: 10px 20px;
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
+            background: transparent;
+            color: #666;
             border: none;
-            border-radius: 6px;
+            border-bottom: 3px solid transparent;
             cursor: pointer;
             font-weight: 600;
-            transition: background 0.3s;
+            transition: all 0.3s;
+        }
+
+        .tab:hover {
+            color: #667eea;
         }
 
         .tab.active {
-            background: white;
             color: #667eea;
+            border-bottom-color: #667eea;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
         }
 
         .empty-state {
@@ -245,7 +258,10 @@
         <!-- Status Bar -->
         <div class="status-bar">
             <span class="status-indicator" id="statusIndicator">⚪ Не подключено</span>
-            <button id="logoutBtn" class="danger hidden" onclick="logout()">Выход</button>
+            <div>
+                <button id="changeApiBtn" class="secondary" style="margin-right: 8px;">⚙️ Изменить API</button>
+                <button id="logoutBtn" class="danger hidden">Выход</button>
+            </div>
         </div>
 
         <!-- Alert Container -->
@@ -261,20 +277,26 @@
                     Введите URL вашего бэкенда (например: https://library-api.onrender.com)
                 </small>
             </div>
-            <button onclick="saveApiUrl()">💾 Сохранить URL</button>
+            <div style="display: flex; gap: 10px;">
+                <button onclick="saveApiUrl()">💾 Сохранить URL</button>
+                <button class="secondary" onclick="clearApiUrl()" id="clearApiBtn" style="display: none;">🗑️ Очистить</button>
+            </div>
+            <div id="currentApiDisplay" style="margin-top: 12px; padding: 10px; background: #f0f0f0; border-radius: 6px; display: none;">
+                <strong>Текущий API:</strong> <span id="currentApiUrl"></span>
+            </div>
         </div>
 
         <!-- Authentication Section -->
         <div class="card hidden" id="authCard">
-            <h3>🔐 Вход в систему</h3>
+            <h3>🔐 Аутентификация</h3>
             
             <div class="tabs">
-                <button class="tab active" onclick="switchTab('login')">Вход</button>
-                <button class="tab" onclick="switchTab('register')">Регистрация</button>
+                <button class="tab active" data-tab="login">Вход</button>
+                <button class="tab" data-tab="register">Регистрация</button>
             </div>
 
             <!-- Login Form -->
-            <div id="loginForm">
+            <div class="tab-content active" data-content="login">
                 <div class="form-group">
                     <label>Email</label>
                     <input type="email" id="loginEmail" placeholder="user@example.com">
@@ -283,11 +305,11 @@
                     <label>Пароль</label>
                     <input type="password" id="loginPassword" placeholder="Минимум 8 символов">
                 </div>
-                <button onclick="login()">Войти</button>
+                <button onclick="login()">🔓 Войти</button>
             </div>
 
             <!-- Register Form -->
-            <div id="registerForm" class="hidden">
+            <div class="tab-content" data-content="register">
                 <div class="form-group">
                     <label>Email</label>
                     <input type="email" id="registerEmail" placeholder="user@example.com">
@@ -296,7 +318,7 @@
                     <label>Пароль</label>
                     <input type="password" id="registerPassword" placeholder="Минимум 8 символов, буквы и цифры">
                 </div>
-                <button onclick="register()">Зарегистрироваться</button>
+                <button onclick="register()">✍️ Зарегистрироваться</button>
             </div>
         </div>
 
@@ -333,7 +355,7 @@
                             <label>Описание</label>
                             <textarea id="bookDescription"></textarea>
                         </div>
-                        <button class="success" onclick="addBook()">Добавить книгу</button>
+                        <button class="success" onclick="addBook()">➕ Добавить книгу</button>
                     </div>
 
                     <!-- Books List -->
@@ -362,7 +384,7 @@
                             <label>Email *</label>
                             <input type="email" id="readerEmail" required>
                         </div>
-                        <button class="success" onclick="addReader()">Добавить читателя</button>
+                        <button class="success" onclick="addReader()">➕ Добавить читателя</button>
                     </div>
 
                     <!-- Readers List -->
@@ -390,7 +412,7 @@
                             <label>ID читателя *</label>
                             <input type="number" id="borrowReaderId" required>
                         </div>
-                        <button class="success" onclick="borrowBook()">Выдать</button>
+                        <button class="success" onclick="borrowBook()">📤 Выдать</button>
                     </div>
 
                     <div>
@@ -403,7 +425,7 @@
                             <label>ID читателя *</label>
                             <input type="number" id="returnReaderId" required>
                         </div>
-                        <button onclick="returnBook()">Вернуть</button>
+                        <button onclick="returnBook()">📥 Вернуть</button>
                     </div>
                 </div>
             </div>
@@ -416,15 +438,41 @@
         let TOKEN = localStorage.getItem('authToken') || '';
 
         // ============= INITIALIZATION =============
-        // Auto-load API URL on page load
         window.addEventListener('DOMContentLoaded', () => {
             const savedUrl = localStorage.getItem('apiUrl');
             if (savedUrl) {
                 document.getElementById('apiUrl').value = savedUrl;
                 API_URL = savedUrl;
             }
+            
+            // Setup tabs
+            setupTabs();
+            
+            // Setup logout button
+            document.getElementById('logoutBtn').addEventListener('click', logout);
+            
+            // Setup change API button
+            document.getElementById('changeApiBtn').addEventListener('click', showApiConfig);
+            
             updateUI();
         });
+
+        function setupTabs() {
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const targetTab = this.getAttribute('data-tab');
+                    
+                    // Remove active from all tabs and contents
+                    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                    
+                    // Add active to clicked tab and corresponding content
+                    this.classList.add('active');
+                    document.querySelector(`.tab-content[data-content="${targetTab}"]`).classList.add('active');
+                });
+            });
+        }
 
         // ============= UTILITY FUNCTIONS =============
         function showAlert(message, type = 'info') {
@@ -440,20 +488,32 @@
             const isConfigured = !!API_URL;
             const isAuthenticated = !!TOKEN;
 
-            document.getElementById('apiConfigCard').classList.toggle('hidden', isConfigured);
+            // Show/hide sections based on state
+            const showApiConfig = !isConfigured;
+            document.getElementById('apiConfigCard').classList.toggle('hidden', !showApiConfig);
             document.getElementById('authCard').classList.toggle('hidden', !isConfigured || isAuthenticated);
             document.getElementById('mainContent').classList.toggle('hidden', !isAuthenticated);
             document.getElementById('logoutBtn').classList.toggle('hidden', !isAuthenticated);
+            
+            // Show change API button when configured
+            document.getElementById('changeApiBtn').classList.toggle('hidden', !isConfigured);
+            
+            // Show current API if configured
+            if (isConfigured) {
+                document.getElementById('currentApiDisplay').style.display = 'block';
+                document.getElementById('currentApiUrl').textContent = API_URL;
+                document.getElementById('clearApiBtn').style.display = 'inline-block';
+            }
 
             const statusEl = document.getElementById('statusIndicator');
             if (isAuthenticated) {
-                statusEl.textContent = '✅ Подключено';
+                statusEl.textContent = '✅ Подключено к ' + API_URL.replace('https://', '').replace('http://', '');
                 statusEl.className = 'status-indicator status-connected';
             } else if (isConfigured) {
-                statusEl.textContent = '🔓 API настроен';
+                statusEl.textContent = '🔓 Ожидание входа';
                 statusEl.className = 'status-indicator status-disconnected';
             } else {
-                statusEl.textContent = '⚪ Не подключено';
+                statusEl.textContent = '⚪ Не настроено';
                 statusEl.className = 'status-indicator status-disconnected';
             }
 
@@ -492,6 +552,11 @@
         }
 
         // ============= API CONFIGURATION =============
+        function showApiConfig() {
+            document.getElementById('apiConfigCard').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
         function saveApiUrl() {
             const url = document.getElementById('apiUrl').value.trim();
             if (!url) {
@@ -501,24 +566,38 @@
 
             try {
                 new URL(url);
-                API_URL = url.replace(/\/$/, ''); // Remove trailing slash
+                
+                // If changing API, logout first
+                if (API_URL && API_URL !== url && TOKEN) {
+                    TOKEN = '';
+                    localStorage.removeItem('authToken');
+                    showAlert('API изменён. Войдите заново.', 'info');
+                }
+                
+                API_URL = url.replace(/\/$/, '');
                 localStorage.setItem('apiUrl', API_URL);
-                showAlert('URL сохранён! Теперь войдите в систему.', 'success');
+                showAlert('URL сохранён!', 'success');
                 updateUI();
             } catch (e) {
                 showAlert('Неверный формат URL', 'error');
             }
         }
 
-        // ============= AUTHENTICATION =============
-        function switchTab(tab) {
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            event.target.classList.add('active');
-            
-            document.getElementById('loginForm').classList.toggle('hidden', tab !== 'login');
-            document.getElementById('registerForm').classList.toggle('hidden', tab !== 'register');
+        function clearApiUrl() {
+            if (confirm('Вы уверены? Вы выйдете из системы.')) {
+                API_URL = '';
+                TOKEN = '';
+                localStorage.removeItem('apiUrl');
+                localStorage.removeItem('authToken');
+                document.getElementById('apiUrl').value = '';
+                document.getElementById('currentApiDisplay').style.display = 'none';
+                document.getElementById('clearApiBtn').style.display = 'none';
+                showAlert('API настройки очищены', 'info');
+                updateUI();
+            }
         }
 
+        // ============= AUTHENTICATION =============
         async function register() {
             const email = document.getElementById('registerEmail').value.trim();
             const password = document.getElementById('registerPassword').value;
@@ -535,7 +614,11 @@
                     skipAuth: true
                 });
                 showAlert('Регистрация успешна! Теперь войдите.', 'success');
-                switchTab('login');
+                
+                // Switch to login tab
+                document.querySelector('.tab[data-tab="login"]').click();
+                
+                // Clear register fields
                 document.getElementById('registerEmail').value = '';
                 document.getElementById('registerPassword').value = '';
             } catch (error) {
@@ -553,7 +636,6 @@
             }
 
             try {
-                // OAuth2 format for FastAPI
                 const formData = new URLSearchParams();
                 formData.append('username', email);
                 formData.append('password', password);
@@ -778,10 +860,6 @@
                 console.error('Failed to return book:', error);
             }
         }
-
-        // ============= INITIALIZATION =============
-        document.getElementById('apiUrl').value = API_URL;
-        updateUI();
     </script>
 </body>
 </html>
