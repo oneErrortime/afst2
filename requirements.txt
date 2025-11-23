@@ -1,12 +1,37 @@
+# FastAPI и зависимости
 fastapi==0.104.1
 uvicorn[standard]==0.24.0
+python-multipart==0.0.6
+
+# База данных
 sqlalchemy==2.0.23
 alembic==1.13.1
 psycopg2-binary==2.9.9
+
+# Аутентификация
 python-jose[cryptography]==3.3.0
 passlib[bcrypt]==1.7.4
 bcrypt==4.1.2
-python-multipart==0.0.6
+
+# Валидация
+pydantic[email]==2.5.0
+
+# Тестирование
 pytest==7.4.3
+pytest-cov==4.1.0
+pytest-asyncio==0.21.1
 httpx==0.25.2
+coverage==7.3.2
+
+# Окружение
 python-dotenv==1.0.0
+
+# Дополнительные инструменты для разработки
+black==23.11.0       # Форматирование кода
+flake8==6.1.0        # Линтер
+mypy==1.7.1          # Проверка типов
+isort==5.12.0        # Сортировка импортов
+
+# Опционально для CI/CD
+pytest-html==4.1.1   # HTML отчеты для pytest
+pytest-xdist==3.5.0  # Параллельный запуск тестов

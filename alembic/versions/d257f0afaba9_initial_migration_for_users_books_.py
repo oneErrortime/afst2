@@ -27,7 +27,6 @@ def upgrade() -> None:
     sa.Column('year', sa.Integer(), nullable=True),
     sa.Column('isbn', sa.String(), nullable=True),
     sa.Column('copies', sa.Integer(), nullable=True),
-    sa.Column('description', sa.String(), nullable=True),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('isbn')
     )
